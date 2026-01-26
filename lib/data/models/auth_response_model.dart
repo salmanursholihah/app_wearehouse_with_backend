@@ -1,0 +1,39 @@
+class AuthResponseModel {
+  final String token;
+  final User user;
+
+  AuthResponseModel({
+    required this.token,
+    required this.user,
+  });
+
+  factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
+    return AuthResponseModel(
+      token: json['token'],
+      user: User.fromJson(json['user']),
+    );
+  }
+}
+
+class User {
+  final int id;
+  final String name;
+  final String email;
+  final String role;
+
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.role,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      role: json['role'],
+    );
+  }
+}
