@@ -1,6 +1,6 @@
 import 'package:app_wearehouse_with_backend/presentation/pages/user/dashboard/user_dashboard_page.dart';
 import 'package:app_wearehouse_with_backend/presentation/pages/user/inventory/user_inventory_page.dart';
-import 'package:app_wearehouse_with_backend/presentation/pages/user/profile/profile_page.dart';
+import 'package:app_wearehouse_with_backend/presentation/pages/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/user_buttom_navbar.dart';
 
