@@ -1,11 +1,11 @@
+import 'package:app_wearehouse_with_backend/presentation/pages/admin/scan/scan_pages.dart';
 import 'package:flutter/material.dart';
-import 'dashboard/admin_dashboard_page.dart';
-import 'inventory/inventory_page.dart';
 import '../../widgets/admin_buttom_navbar.dart';
 
+import 'dashboard/admin_dashboard_page.dart';
+import 'inventory/inventory_page.dart';
 import 'jobs/jobs_pages.dart';
-import 'profile/profile_pages.dart';
-import 'scan/scan_pages.dart';
+import '../profile/profile_pages.dart';
 
 class AdminMainPage extends StatefulWidget {
   const AdminMainPage({super.key});
@@ -15,9 +15,9 @@ class AdminMainPage extends StatefulWidget {
 }
 
 class _AdminMainPageState extends State<AdminMainPage> {
-  int _index = 0;
+  int _currentIndex = 0;
 
-  final pages = const [
+  final _pages = const [
     AdminDashboardPage(),
     InventoryPage(),
     ScanPage(),
@@ -28,10 +28,15 @@ class _AdminMainPageState extends State<AdminMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[_index],
+      body: _pages[_currentIndex],
+
       bottomNavigationBar: AdminBottomNavbar(
-        currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }

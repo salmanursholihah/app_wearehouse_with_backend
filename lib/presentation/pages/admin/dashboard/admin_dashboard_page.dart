@@ -1,9 +1,10 @@
+import 'package:app_wearehouse_with_backend/presentation/auth/bloc/logout/logout_bloc.dart';
 import 'package:app_wearehouse_with_backend/presentation/pages/admin/scan/scan_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../inventory/inventory_page.dart';
 import '../jobs/jobs_pages.dart';
-import '../scan/scan_pages.dart';
 
 class AdminDashboardPage extends StatelessWidget {
   const AdminDashboardPage({super.key});
@@ -12,7 +13,6 @@ class AdminDashboardPage extends StatelessWidget {
 
   String _greeting() {
     final hour = DateTime.now().hour;
-
     if (hour < 12) return "Selamat Pagi";
     if (hour < 15) return "Selamat Siang";
     if (hour < 18) return "Selamat Sore";
@@ -21,45 +21,62 @@ class AdminDashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+    final authToken = 'YOUR_AUTH_TOKEN'; // nanti ambil dari storage
 
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        elevation: 0,
-        title: const Text("Admin Dashboard"),
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
-          ),
-        ],
-      ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _header(),
-            const SizedBox(height: 20),
-
-            _summarySection(),
-
-            const SizedBox(height: 28),
-
-            _quickActions(context),
-
-            const SizedBox(height: 28),
-
-            _recentActivity(),
+    return BlocListener<LogoutBloc, LogoutState>(
+  listener: (context, state) {
+    state.whenOrNull(
+      success: () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/login',
+          (_) => false,
+        );
+      },
+      error: (msg) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      },
+    );
+  },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          title: const Text("Admin Dashboard"),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                context.read<LogoutBloc>().add(
+                  const LogoutEvent.submit(),
+                );
+              },
+            ),
           ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _header(),
+              const SizedBox(height: 20),
+              _summarySection(),
+              const SizedBox(height: 28),
+              _quickActions(context),
+              const SizedBox(height: 28),
+              _recentActivity(),
+            ],
+          ),
         ),
       ),
     );
   }
+
+
 
   // ================= HEADER =================
   Widget _header() {
@@ -321,3 +338,6 @@ class _ActivityTile extends StatelessWidget {
     );
   }
 }
+
+
+

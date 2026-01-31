@@ -1,50 +1,74 @@
-import 'package:app_wearehouse_with_backend/presentation/pages/user/scan/scan_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../auth/bloc/logout/logout_bloc.dart';
 import '../inventory/user_inventory_page.dart';
-import '../profile/profile_page.dart';
-import '../../admin/scan/scan_pages.dart';
+import '../../profile/profile_page.dart';
+import '../scan/scan_pages.dart';
+
 
 class UserDashboardPage extends StatelessWidget {
   const UserDashboardPage({super.key});
 
   static const primaryColor = Color(0xFF2FA4A9);
 
-  @override
+  @override  
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      final authToken = 'YOUR_AUTH_TOKEN'; // nanti ambil dari storage
 
-      /// ❌ Tidak pakai back button
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        elevation: 0,
-        title: const Text("User Dashboard"),
-        automaticallyImplyLeading: false,
-      ),
+    return BlocListener<LogoutBloc, LogoutState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          success: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (_) => false,
+            );
+          },
+          error: (message) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            );
+          },
+        );
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
 
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _header(),
-
-            const SizedBox(height: 20),
-
-            _summary(),
-
-            const SizedBox(height: 24),
-
-            /// ✅ FIX ERROR DI SINI
-            _quickMenu(context),
-
-            const SizedBox(height: 24),
-
-            _recentTask(),
+        /// 🔹 APP BAR + LOGOUT
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          title: const Text("User Dashboard"),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                context.read<LogoutBloc>().add(
+                   const LogoutEvent.submit(),
+                );
+              },
+            ),
           ],
+        ),
+
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _header(),
+              const SizedBox(height: 20),
+              _summary(),
+              const SizedBox(height: 24),
+              _quickMenu(context),
+              const SizedBox(height: 24),
+              _recentTask(),
+            ],
+          ),
         ),
       ),
     );
   }
-
   // ================= HEADER =================
   Widget _header() {
     return Container(
