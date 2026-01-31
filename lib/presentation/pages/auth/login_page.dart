@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../presentation/auth/bloc/login_bloc.dart';
+import '../../auth/bloc/login/login_bloc.dart';
+import '../../pages/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -212,6 +213,38 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                           ),
                         ),
+
+                   Column(
+  children: [
+    const Text(
+      'You do not have an account?',
+      style: TextStyle(color: Colors.grey),
+      textAlign: TextAlign.center,
+    ),
+    const SizedBox(height: 8),
+    GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const RegisterPage(),
+          ),
+        );
+      },
+      child: const Text(
+        'Register here',
+        style: TextStyle(
+          color: Color(0xFF2EC4B6),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    const SizedBox(height: 24),
+  ],
+),
+
+
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
